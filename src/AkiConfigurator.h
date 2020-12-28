@@ -32,3 +32,4 @@ class AkiConfigurator{
 };
 
 extern AkiConfigurator AkiCfg;
+void ParceSerial(char* str, byte maxStrLength);

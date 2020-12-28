@@ -33,7 +33,6 @@ void AkiConfigurator::begin(bool clear){
     }
     
 }
-
 void AkiConfigurator::addCfg(void *cfgStruckt, bool *cfgIsUpdated, char *cfgName, size_t cfgSize){
     AkiConfiguratorCfg.CfgStructsCount ++;
     AkiConfiguratorCfg.CfgStructs[AkiConfiguratorCfg.CfgStructsCount] = cfgStruckt;
@@ -53,7 +52,6 @@ void AkiConfigurator::addCfg(void *cfgStruckt, bool *cfgIsUpdated, char *cfgName
     Serial.println("% of all EEPRom");
     *AkiConfiguratorCfg.CfgStructsIsEdited[0]=true;
 }
-
 void AkiConfigurator::loop(){
     for(uint8_t i=0;i<=AkiConfiguratorCfg.CfgStructsCount;i++){
         if(*AkiConfiguratorCfg.CfgStructsIsEdited[i]==true){
@@ -65,6 +63,26 @@ void AkiConfigurator::loop(){
             Serial.println(AkiConfiguratorCfg.CfgStructsInEEPRomAddreses[i]);
             eeprom_update_block(AkiConfiguratorCfg.CfgStructs[i],(void*)AkiConfiguratorCfg.CfgStructsInEEPRomAddreses[i],AkiConfiguratorCfg.CfgStructsSize[i]);
             *AkiConfiguratorCfg.CfgStructsIsEdited[i]=false;
+        }
+    }
+}
+void ParceSerial(char *str, byte maxStrLength)
+{
+    for (uint8_t i = 0; i < maxStrLength;)
+    {
+        if (Serial.available() > 0)
+        {
+            str[i] = Serial.read();
+            if (str[i] == 10)
+            {
+                if (str[i - 1] == 13)
+                {
+                    i--;
+                }
+                str[i] = '\0';
+                break;
+            }
+            i++;
         }
     }
 }
